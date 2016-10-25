@@ -6,6 +6,9 @@ int in2 = 2;
 int enB = 5;
 int in3 = 3;
 int in4 = 4;
+// IR sensors
+int leftIR = 13;
+int rightIR = 12;
 
 void setup() {
   // set all the motor control pins to outputs
@@ -15,6 +18,9 @@ void setup() {
   pinMode(in2, OUTPUT);
   pinMode(in3, OUTPUT);
   pinMode(in4, OUTPUT);
+  // set serial
+  Serial.begin(9600);
+
 }
 
 void motorsOff() {
@@ -94,11 +100,21 @@ void motorsTurnLeft(int period, int power) {
   motorsOff();
 }
 
+int IRleft() {
+  return digitalRead(leftIR);
+}
+
+int IRright() {
+  return digitalRead(rightIR);
+}
+
 
 void loop() {
-  motorsForward(2000, 250);
-  motorsBackward(2000, 250);
-  motorsTurnLeft(2000,250);
-  motorsTurnRight(2000, 250);
-  delay(3000);
+//  motorsForward(2000, 250);
+//  motorsBackward(2000, 250);
+//  motorsTurnLeft(2000,250);
+//  motorsTurnRight(2000, 250);
+//  delay(3000);
+  Serial.println(IRleft()); // print the data from the left sensor
+  delay(500);
 }
