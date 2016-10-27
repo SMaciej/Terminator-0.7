@@ -101,20 +101,20 @@ void motorsTurnLeft(int period, int power) {
 }
 
 int IRleft() {
+  // returns left IR value
   return digitalRead(leftIR);
 }
 
 int IRright() {
+  // return right IR value
   return digitalRead(rightIR);
 }
 
 
 void loop() {
-//  motorsForward(2000, 250);
-//  motorsBackward(2000, 250);
-//  motorsTurnLeft(2000,250);
-//  motorsTurnRight(2000, 250);
-//  delay(3000);
-  Serial.println(IRleft()); // print the data from the left sensor
-  delay(500);
+  motorsForward(2000, 250);
+  motorsBackward(2000, 250);
+  motorsTurnLeft(2000,250);
+  motorsTurnRight(2000, 250);
+  delay(3000);
 }
