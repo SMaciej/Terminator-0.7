@@ -1,18 +1,18 @@
-int led = 12;
+int led = 13;
 
 void setup() {                
   pinMode(led, OUTPUT);     
 }
 
-void blink {
+void blink(int length) {
   // blink LED
   digitalWrite(led, HIGH);
-  delay(1000);
+  delay(length);
   digitalWrite(led, LOW);
   delay(1000);            
   
 }
 
 void loop() {
-
+  blink(3000);
 }
