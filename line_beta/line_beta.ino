@@ -168,9 +168,16 @@ void listen_bluetooth() {
       // turn right
       motorsTurnRight(500, 140);
     }
-    if (bt_signal == 'T') {
+    while (bt_signal == 'T') {
       // line-tracking
       line_tracking();
+      if (bt_signal != 'T') {
+        break;
+      }
+    }
+    if (bt_signal == 'S') {
+      // line-tracking
+      ultrasonic_values();
     }
   }
 }
@@ -202,8 +209,8 @@ void ultrasonic_values() {
    y = ping(middleEye);
    x = ping(leftEye);
    z = ping(rightEye);
-   Serial.println(x);
-   delay(300); //delay 1/4 seconds.
+   Serial.println(y);
+   delay(200); //delay 1/4 seconds.
 }
 
 void loop() {
