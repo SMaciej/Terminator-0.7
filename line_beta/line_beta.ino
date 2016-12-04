@@ -21,6 +21,7 @@ int rightEye = 15;
 int rightEyeTrigger = 16;
 // bluetooth signal
 char bt_signal;
+char btx;
 
 void setup() {
   // set all the control pins to outputs
@@ -62,11 +63,11 @@ void motorsForward(int period, int power) {
   analogWrite(enA, power);
   analogWrite(enB, power);
   
-  delay(period);
+  if (period != 0) { 
+    delay(period);    
+  }
   
   motorsOff();
-  
-
 }
 
 void motorsBackward(int period, int power) {
@@ -152,9 +153,13 @@ void listen_bluetooth() {
     if (bt_signal == '0') {
       motorsOff();
     }
-    if (bt_signal == 'F') {
+    while (bt_signal == 'F') {
       // drive forward
-      motorsForward(1000, 140);
+      btx = (BT.read());
+      motorsForward(0, 140);
+      if (btx == '0') {
+        break;
+      }
     }
     if (bt_signal == 'B') {
       // drive backward
@@ -170,8 +175,9 @@ void listen_bluetooth() {
     }
     while (bt_signal == 'T') {
       // line-tracking
+      btx = (BT.read());
       line_tracking();
-      if (bt_signal != 'T') {
+      if (btx == '0') {
         break;
       }
     }
