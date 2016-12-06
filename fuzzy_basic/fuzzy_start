@@ -33,6 +33,7 @@ int rightEyeTrigger = 16;
 char bt_signal;
 char btx;
 Fuzzy* fuzzy = new Fuzzy();
+int test = 0;
 
 
 void setup() {
@@ -109,11 +110,11 @@ void setup() {
   FuzzyRuleAntecedent* middleSmallAndLeftSmall = new FuzzyRuleAntecedent();
   middleSmallAndLeftSmall->joinWithAND(small,small2);
   FuzzyRuleConsequent* DoATurn= new FuzzyRuleConsequent();
-  DoATurn->addOutput(mild_turn);
+  DoATurn->addOutput(small_turn);
   //
   FuzzyRule* fuzzyRule01 = new FuzzyRule(1, middleSmallAndLeftSmall, DoATurn);
   fuzzy->addFuzzyRule(fuzzyRule01);
-
+  
   // Zasada druga
   
   FuzzyRuleAntecedent* middleBigAndLeftBig = new FuzzyRuleAntecedent();
@@ -358,35 +359,76 @@ int sonic_middle() {
    }
    return y;
 }
+/*
+double average_ping(int ultraSoundSignal) {
+  unsigned long sum;
+ 
+  for (int i=0; i<=9; i++) {
+    sum += ping(ultraSoundSignal);
+    delay(100);
+  }
+ 
+  return sum/10;
+}
+*/
 
 void loop() {
   //listen_bluetooth();
-  delay(1000);
+  //motorsForward(1000,195);
+ // Serial.println(average_ping(middleEye));
+  Serial.println(sonic_middle());
+  Serial.println(sonic_left());
+  //Serial.println(average_ping(leftEye));
 
-  fuzzy->setInput(1, sonic_middle());
-  fuzzy->setInput(2, sonic_left());
+  
+  Serial.println(test);
+  
+  fuzzy->setInput(1, test); // middle
+  fuzzy->setInput(2, test); // left
   fuzzy->fuzzify();
-  
-  float output = fuzzy->defuzzify(1);
-  float output2 = fuzzy->defuzzify(2);
 
-
-  
-  if(output2 == 0)
+  if(test >= 30)
   {
-    Serial.println(sonic_middle());
-    Serial.println(sonic_left());
-    Serial.println(output);
-    motorsForward(output2,output);
+    test = 0;
   }
   else
   {
-    Serial.println(sonic_middle());
-    Serial.println(sonic_left());
-    Serial.println(output2);
-    motorsTurnLeft(output2,125);
+    test = test + 5;
   }
   
+  
+  int output = 0;
+  output = fuzzy->defuzzify(1);
+  int output2 = 0;
+  output2 = fuzzy->defuzzify(2);
+
+  
+  
+  Serial.println(output);
+  Serial.println(output2);
+  //output = 125;
+  //motorsForward(300,output);
+  
+  if(output2 < 300)
+  {
+  //  Serial.println(sonic_middle());
+  //  Serial.println(sonic_left());
+  //  Serial.println(output);
+    //output = 125;
+    motorsForward(300,output);
+    Serial.println("Wykonalem jazde do przodu o mocy");
+    Serial.println(output);
+  }
+  if(output2 < 600 && output2 > 300)
+  {
+  //  Serial.println(sonic_middle());
+   // Serial.println(sonic_left());
+ //   Serial.println(output2);
+    motorsTurnLeft(output2,output);
+    Serial.println("wykonalem skret w lewo");
+  }
+
+  delay(1000);
   
 
   /*
