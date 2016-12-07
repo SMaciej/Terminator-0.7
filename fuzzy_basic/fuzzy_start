@@ -310,9 +310,9 @@ unsigned long ping(int ultraSoundSignal) {
   unsigned long ultrasoundValue = 0;
   pinMode(ultraSoundSignal, OUTPUT); // Switch signalpin to output
   digitalWrite(ultraSoundSignal, LOW); // Send low pulse
-  delayMicroseconds(2); // Wait for 2 microseconds
+  delayMicroseconds(4); // Wait for 2 microseconds
   digitalWrite(ultraSoundSignal, HIGH); // Send high pulse
-  delayMicroseconds(5); // Wait for 5 microseconds
+  delayMicroseconds(10); // Wait for 5 microseconds
   digitalWrite(ultraSoundSignal, LOW); // Holdoff
   pinMode(ultraSoundSignal, INPUT); // Switch signalpin to input
   digitalWrite(ultraSoundSignal, HIGH); // Turn on pullup resistor
@@ -341,61 +341,113 @@ void ultrasonic_values() {
 */
 
 int sonic_left() {
-   int x = 0;
-   x = ping(leftEye);
-   if(x>=30)
-   {
-    x = 30;
+   int value = 0;
+   int new_value = 0;
+
+   // get maximum
+   for (int i=0; i<3; i++) {
+    new_value = ping(leftEye);
+    if (new_value >= value) {
+      value = new_value;
+    }
    }
-   return x;
+
+   if(value>=30) {
+    value = 30;
+   }
+   return value;
 }
 
 int sonic_middle() {
-   int y= 0;
-   y = ping(middleEye);
-   if(y>=30)
-   {
-    y = 30;
+   int value = 0;
+   int new_value = 0;
+
+   // get maximum
+   for (int i=0; i<3; i++) {
+    new_value = ping(middleEye);
+    if (new_value >= value) {
+      value = new_value;
+    }
    }
-   return y;
+   
+   if(value>=30) {
+    value = 30;
+   }
+   return value;
 }
-/*
+
+int sonic_left2() {
+   int value = 0;
+   int new_value = 0;
+
+   value = ping(leftEye);
+
+   if(value>=30) {
+    value = 30;
+   }
+   if (value == 0)
+   {
+    return sonic_left2();
+   }
+   else
+   {
+   return value;
+   }
+}
+
+int sonic_middle2() {
+   int value = 0;
+   int new_value = 0;
+
+   value = ping(middleEye);
+
+   if(value>=30) {
+    value = 30;
+   }
+   if (value == 0)
+   {
+    return sonic_middle2();
+   }
+   else
+   {
+   return value;
+   }
+}
+
 double average_ping(int ultraSoundSignal) {
-  unsigned long sum;
+  unsigned long arr[10];
  
-  for (int i=0; i<=9; i++) {
-    sum += ping(ultraSoundSignal);
-    delay(100);
+  for (int i=0; i<=10; i++) {
+    arr[i] = ping(ultraSoundSignal);
+    delay(10);
   }
- 
-  return sum/10;
+  for (int i=1; i<=10; i++){
+    Serial.println(arr[i]);
+  }
+  
 }
-*/
+
 
 void loop() {
+
+  
+ 
   //listen_bluetooth();
   //motorsForward(1000,195);
  // Serial.println(average_ping(middleEye));
-  Serial.println(sonic_middle());
-  Serial.println(sonic_left());
+  //Serial.println(sonic_middle());
+  //Serial.println(sonic_left());
   //Serial.println(average_ping(leftEye));
 
   
-  Serial.println(test);
+  //Serial.println(test);
   
-  fuzzy->setInput(1, test); // middle
-  fuzzy->setInput(2, test); // left
+  fuzzy->setInput(1, sonic_middle2()); // middle
+  fuzzy->setInput(2, sonic_left2()); // left
   fuzzy->fuzzify();
 
-  if(test >= 30)
-  {
-    test = 0;
-  }
-  else
-  {
-    test = test + 5;
-  }
-  
+  Serial.println(sonic_middle2());
+  Serial.println(sonic_left2());
   
   int output = 0;
   output = fuzzy->defuzzify(1);
@@ -409,35 +461,37 @@ void loop() {
   //output = 125;
   //motorsForward(300,output);
   
-  if(output2 < 300)
+  if(output2 == 0 )
   {
   //  Serial.println(sonic_middle());
   //  Serial.println(sonic_left());
   //  Serial.println(output);
     //output = 125;
     motorsForward(300,output);
-    Serial.println("Wykonalem jazde do przodu o mocy");
-    Serial.println(output);
+    //Serial.println("Wykonalem jazde do przodu o mocy");
+    //Serial.println(output);
   }
-  if(output2 < 600 && output2 > 300)
+  else
   {
   //  Serial.println(sonic_middle());
    // Serial.println(sonic_left());
  //   Serial.println(output2);
-    motorsTurnLeft(output2,output);
-    Serial.println("wykonalem skret w lewo");
+
+    //Serial.println("wykonalem skret w lewo");
+    motorsTurnLeft(output2,125);
+   
+    
   }
 
-  delay(1000);
+  //delay(500);
   
 
-  /*
+ /*
   motorsTurnLeft(550,125);
   delay(1000);
   // obrót o 180
   motorsTurnLeft(1100,125);
+*/
 
-  */
  // Serial.println(output);
-  
 }
