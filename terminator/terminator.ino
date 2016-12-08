@@ -54,10 +54,10 @@ void setup() {
   pinMode(rightEye,OUTPUT);
   
   // set serial
-  //Serial.begin(9600);    // uncomment that for Serial to work
+  Serial.begin(9600);    // uncomment that for Serial to work
   // set bluetooth serial
   //BT.begin(9600);        // uncomment that for BT to work
-  BT.println("Terminator 0.7 connected.");
+  //BT.println("Terminator 0.7 connected.");
   
   // ZBIORY ROZMYTE
   
@@ -144,46 +144,46 @@ void setup() {
 void listen_bluetooth() {
   if (BT.available()) {
     bt_signal = (BT.read());
-    if (bt_signal == '0') {
+    if (bt_signal == 'O') {
       motorsOff();
     }
     while (bt_signal == 'F') {
       // drive forward
       btx = (BT.read());
       motorsForward(0, 140);
-      if (btx == '0') {
+      if (btx == 'O') {
         break;
       }
     }
     while (bt_signal == 'B') {
       // drive backward
       btx = (BT.read());
-      motorsBackward(1000, 140);
-      if (btx == '0') {
+      motorsBackward(0, 140);
+      if (btx == 'O') {
         break;
       }
     }
     while (bt_signal == 'L') {
       // turn left
       btx = (BT.read());
-      motorsTurnLeft(500, 140);
-      if (btx == '0') {
+      motorsTurnLeft(0, 140);
+      if (btx == 'O') {
         break;
       }
     } 
     while (bt_signal == 'R') {
       // turn right
       btx = (BT.read());
-      motorsTurnRight(500, 140);
-      if (btx == '0') {
+      motorsTurnRight(0, 140);
+      if (btx == 'O') {
         break;
       }
     }
-    while (bt_signal == 'T') {
+    while (bt_signal == 'A') {
       // line-tracking
       btx = (BT.read());
       line_tracking();
-      if (btx == '0') {
+      if (btx == 'O') {
         break;
       }
     }
@@ -195,5 +195,50 @@ void listen_bluetooth() {
 
 
 void loop() {
-  line_tracking();
+  
+  fuzzy->setInput(1, sonic_middle2()); // middle
+  fuzzy->setInput(2, sonic_left2()); // left
+  fuzzy->fuzzify();
+
+  Serial.println(sonic_middle2());
+  Serial.println(sonic_left2());
+  
+  int output = 0;
+  output = fuzzy->defuzzify(1);
+  int output2 = 0;
+  output2 = fuzzy->defuzzify(2);
+
+  
+  
+  Serial.println(output);
+  Serial.println(output2);
+  //output = 125;
+  //motorsForward(300,output);
+  
+  if(output2 == 0 )
+  {
+  //  Serial.println(sonic_middle());
+  //  Serial.println(sonic_left());
+  //  Serial.println(output);
+    //output = 125;
+    motorsForward(300,output);
+    Serial.println("Wykonalem jazde do przodu o mocy");
+    Serial.println(output);
+  }
+  else
+  {
+  //  Serial.println(sonic_middle());
+   // Serial.println(sonic_left());
+ //   Serial.println(output2);
+
+    Serial.println("wykonalem skret w lewo");
+    motorsTurnLeft(output2,125);
+   
+    
+  }
+  
 }
+
+
+
+

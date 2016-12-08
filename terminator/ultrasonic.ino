@@ -128,8 +128,8 @@ void ultrasonic_sensors() {
   //  Serial.println(output);
     //output = 125;
     motorsForward(300,output);
-    //Serial.println("Wykonalem jazde do przodu o mocy");
-    //Serial.println(output);
+    Serial.println("Wykonalem jazde do przodu o mocy");
+    Serial.println(output);
   }
   else
   {
@@ -137,7 +137,7 @@ void ultrasonic_sensors() {
    // Serial.println(sonic_left());
  //   Serial.println(output2);
 
-    //Serial.println("wykonalem skret w lewo");
+    Serial.println("wykonalem skret w lewo");
     motorsTurnLeft(output2,125);
    
     
