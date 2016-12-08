@@ -1,4 +1,3 @@
-
 #include <Fuzzy.h>
 #include <FuzzyComposition.h>
 #include <FuzzyInput.h>
@@ -36,6 +35,8 @@ int rightEyeTrigger = 16;
 // bluetooth signal
 char bt_signal;
 char btx;
+Fuzzy* fuzzy = new Fuzzy();
+int test = 0;
 
 
 void setup() {
@@ -154,17 +155,29 @@ void listen_bluetooth() {
         break;
       }
     }
-    if (bt_signal == 'B') {
+    while (bt_signal == 'B') {
       // drive backward
+      btx = (BT.read());
       motorsBackward(1000, 140);
+      if (btx == '0') {
+        break;
+      }
     }
-    if (bt_signal == 'L') {
+    while (bt_signal == 'L') {
       // turn left
+      btx = (BT.read());
       motorsTurnLeft(500, 140);
+      if (btx == '0') {
+        break;
+      }
     } 
-    if (bt_signal == 'R') {
+    while (bt_signal == 'R') {
       // turn right
+      btx = (BT.read());
       motorsTurnRight(500, 140);
+      if (btx == '0') {
+        break;
+      }
     }
     while (bt_signal == 'T') {
       // line-tracking
@@ -175,14 +188,12 @@ void listen_bluetooth() {
       }
     }
     if (bt_signal == 'S') {
-      // line-tracking
-      ultrasonic_values();
+      // ultrasonic sensors
     }
   }
 }
 
 
-
 void loop() {
-  listen_bluetooth();
+  line_tracking();
 }

@@ -1,11 +1,6 @@
 // ULTRASONIC SENSORS FUNCTIONS AND ALGORITHMS
 
 
-// GLOBAL VARIABLES
-Fuzzy* fuzzy = new Fuzzy();
-int test = 0;
-
-
 unsigned long ping(int ultraSoundSignal) {
   // get sensor value in cm
   
@@ -103,20 +98,7 @@ int sonic_middle2() {
    {
    return value;
    }
-}
-
-
-double average_ping(int ultraSoundSignal) {
-  unsigned long arr[10];
- 
-  for (int i=0; i<=10; i++) {
-    arr[i] = ping(ultraSoundSignal);
-    delay(10);
-  }
-  for (int i=1; i<=10; i++){
-    Serial.println(arr[i]);
-  }
-  
+} 
   
 void ultrasonic_sensors() {
   
@@ -160,8 +142,6 @@ void ultrasonic_sensors() {
    
     
   }
-  
-}
   
 }
 
