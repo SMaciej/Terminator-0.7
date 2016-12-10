@@ -7,6 +7,7 @@
 #include <FuzzyRuleAntecedent.h>
 #include <FuzzyRuleConsequent.h>
 #include <FuzzySet.h>
+#include <NewPing.h>
 #include<SoftwareSerial.h>
 SoftwareSerial BT(1, 0);
 
@@ -21,15 +22,15 @@ int enB = 5;
 int in3 = 6;
 int in4 = 7;
 // IR sensors
-int leftIR = 13;
-int rightIR = 12;
+int leftIR = 14;
+int rightIR = 15;
 // ultrasonic sensors
 int middleEyeTrigger = 8;
-int middleEye = 4;
+int middleEyeEcho = 4;
 int leftEyeTrigger = 3;
-int leftEye = 2;
-int rightEye = 15;
-int rightEyeTrigger = 16;
+int leftEyeEcho = 2;
+int rightEyeEcho = 12;
+int rightEyeTrigger = 13;
 
 // GLOBAL VARIABLES
 // bluetooth signal
@@ -37,6 +38,10 @@ char bt_signal;
 char btx;
 Fuzzy* fuzzy = new Fuzzy();
 int test = 0;
+// ultrasonic sensors
+NewPing leftEye(leftEyeTrigger, leftEyeEcho, 100);
+NewPing middleEye(middleEyeTrigger, middleEyeEcho, 100);
+NewPing rightEye(rightEyeTrigger, rightEyeEcho, 100);
 
 
 void setup() {
@@ -49,9 +54,6 @@ void setup() {
   pinMode(in2, OUTPUT);
   pinMode(in3, OUTPUT);
   pinMode(in4, OUTPUT);
-  pinMode(middleEye,OUTPUT);
-  pinMode(leftEye,OUTPUT);
-  pinMode(rightEye,OUTPUT);
   
   // set serial
   Serial.begin(9600);    // uncomment that for Serial to work
@@ -196,48 +198,10 @@ void listen_bluetooth() {
 
 void loop() {
   
-  fuzzy->setInput(1, sonic_middle2()); // middle
-  fuzzy->setInput(2, sonic_left2()); // left
-  fuzzy->fuzzify();
-
-  Serial.println(sonic_middle2());
-  Serial.println(sonic_left2());
+  ultrasonic_sensors();
   
-  int output = 0;
-  output = fuzzy->defuzzify(1);
-  int output2 = 0;
-  output2 = fuzzy->defuzzify(2);
-
-  
-  
-  Serial.println(output);
-  Serial.println(output2);
-  //output = 125;
-  //motorsForward(300,output);
-  
-  if(output2 == 0 )
-  {
-  //  Serial.println(sonic_middle());
-  //  Serial.println(sonic_left());
-  //  Serial.println(output);
-    //output = 125;
-    motorsForward(300,output);
-    Serial.println("Wykonalem jazde do przodu o mocy");
-    Serial.println(output);
-  }
-  else
-  {
-  //  Serial.println(sonic_middle());
-   // Serial.println(sonic_left());
- //   Serial.println(output2);
-
-    Serial.println("wykonalem skret w lewo");
-    motorsTurnLeft(output2,125);
-   
-    
   }
   
-}
 
 
 
