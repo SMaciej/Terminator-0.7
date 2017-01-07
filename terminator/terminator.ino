@@ -104,7 +104,7 @@ void setup() {
   FuzzySet* small3 = new FuzzySet(0,0,0,30);
   distance3->addFuzzySet(small3);
   FuzzySet* very_small3 = new FuzzySet(0,0,0,15);
-  distance3->addFuzzySet(very_small3);
+  distance2->addFuzzySet(very_small3);
   //
   fuzzy->addFuzzyInput(distance3);
 
@@ -113,48 +113,102 @@ void setup() {
   // predkosc
   FuzzyOutput* speed = new FuzzyOutput(1);
   //
+
   FuzzySet* slow = new FuzzySet(0,150,150,150);
   speed->addFuzzySet(slow);
-  //
+
   FuzzySet* mild = new FuzzySet(0,150,150,255);
   speed->addFuzzySet(mild);
-  //
+
   FuzzySet* fast = new FuzzySet(150,255,255,255);
   speed->addFuzzySet(fast);
   //
   fuzzy->addFuzzyOutput(speed);
 
+  // to psuje! 
+  /*
+  // predkosc lewego skretu
+  FuzzyOutput* speed2 = new FuzzyOutput(2);
+  //
+  FuzzySet* slow2 = new FuzzySet(85,120,120,120);
+  speed->addFuzzySet(slow2);
+  FuzzySet* mild2 = new FuzzySet(100,125,125,150);
+  speed->addFuzzySet(mild2);
+  FuzzySet* fast2 = new FuzzySet(125,230,230,230);
+  speed->addFuzzySet(fast2);
+  //
+  fuzzy->addFuzzyOutput(speed2);
+
+  // predkosc prawego skretu
+  FuzzyOutput* speed3 = new FuzzyOutput(3);
+  //
+  FuzzySet* slow3 = new FuzzySet(85,120,120,120);
+  speed->addFuzzySet(slow3);
+  FuzzySet* mild3 = new FuzzySet(100,125,125,150);
+  speed->addFuzzySet(mild3);
+  FuzzySet* fast3 = new FuzzySet(125,230,230,230);
+  speed->addFuzzySet(fast3);
+  //
+  fuzzy->addFuzzyOutput(speed3);
+  */
   //
 
-  // obrot (jak duzy powinien byc, tj. jego czas trwania)
+  // obrot (jak duzy powinien byc, tzn czas trwania)
   FuzzyOutput* turn = new FuzzyOutput(2);
   //
-  FuzzySet* small_turn = new FuzzySet(300,300,300,600);
-  turn->addFuzzySet(small_turn);
-  //
-  FuzzySet* mild_turn = new FuzzySet(300,600,600,900);
-  turn->addFuzzySet(mild_turn);
-  //
-  FuzzySet* fast_turn = new FuzzySet(600,900,900,900);
-  turn->addFuzzySet(fast_turn);
+  // Lewy skret 
+  /*
+  FuzzySet* left_small_turn = new FuzzySet(1200,1500,1500,1500);
+  turn->addFuzzySet(left_small_turn);
+  FuzzySet* left_mild_turn = new FuzzySet(1200,1500,1500,1800);
+  turn->addFuzzySet(left_mild_turn);
+  FuzzySet* left_fast_turn = new FuzzySet(1500,1800,1800,1800);
+  turn->addFuzzySet(left_fast_turn);
+  // Prawy skret
+  FuzzySet* right_small_turn = new FuzzySet(300,600,600,600);
+  turn->addFuzzySet(right_small_turn);
+  FuzzySet* right_mild_turn = new FuzzySet(300,600,600,900);
+  turn->addFuzzySet(right_mild_turn);
+  FuzzySet* right_fast_turn = new FuzzySet(600,900,900,1200);
+  turn->addFuzzySet(right_fast_turn);
+  */
+
+  
+  // Prawy skret
+  FuzzySet* right_small_turn = new FuzzySet(300,300,300,600);
+  turn->addFuzzySet(right_small_turn);
+  FuzzySet* right_mild_turn = new FuzzySet(300,600,600,900);
+  turn->addFuzzySet(right_mild_turn);
+  FuzzySet* right_fast_turn = new FuzzySet(600,900,900,900);
+  turn->addFuzzySet(right_fast_turn);
   //
   fuzzy->addFuzzyOutput(turn);
 
-  // kierunek (lewo lub prawo)
+  
   FuzzyOutput* side = new FuzzyOutput(3);
-  //
   FuzzySet* left = new FuzzySet(0,0,0,5);
   side->addFuzzySet(left);
-  //
   FuzzySet* right = new FuzzySet(5,10,10,10);
   side->addFuzzySet(right);
   //
   fuzzy->addFuzzyOutput(side);
 
-
+  /*
+  FuzzyOutput* turn2 = new FuzzyOutput(3);
+  // Lewy skret
+  FuzzySet* left_small_turn = new FuzzySet(300,300,300,600);
+  turn2->addFuzzySet(left_small_turn);
+  FuzzySet* left_mild_turn = new FuzzySet(300,600,600,900);
+  turn2->addFuzzySet(left_mild_turn);
+  FuzzySet* left_fast_turn = new FuzzySet(600,900,900,900);
+  turn2->addFuzzySet(left_fast_turn);
+  //
+  fuzzy->addFuzzyOutput(turn2);
+  */
+  
   // ZASADY LOGIKI ROZMYTEJ
 
-  // Pierwsza zasada (jesli Lewo i Prawo Duze, Jedz do przodu szybko)
+  // Pierwsza zasada
   FuzzyRuleAntecedent* ifLeftAndRightBig = new FuzzyRuleAntecedent();
   ifLeftAndRightBig->joinWithAND(big2,big3);
 
@@ -167,121 +221,163 @@ void setup() {
   FuzzyRule* fuzzyRule01 = new FuzzyRule(1,ifLeftAndForwardAndRightBig,GoForwardFast);
   fuzzy->addFuzzyRule(fuzzyRule01); 
 
-
-  // Druga zasada (jeśli przód bardzo mały i prawo mały a lewo średnio lub dużo
-
-
-  FuzzyRuleAntecedent* ifLeftAverageOrBig = new FuzzyRuleAntecedent();
-  ifLeftAverageOrBig->joinWithOR(average2,big2);
-
-  FuzzyRuleConsequent* DoALeftSmallTurn = new FuzzyRuleConsequent();
-  DoALeftSmallTurn->addOutput(small_turn);
-  DoALeftSmallTurn->addOutput(left);
-
-  FuzzyRuleConsequent* DoARightSmallTurn = new FuzzyRuleConsequent();
-  DoARightSmallTurn->addOutput(small_turn);
-  DoARightSmallTurn->addOutput(right);
-
   
+  // Druga zasada
+  FuzzyRuleAntecedent* ifLeftBigAndRightSmall = new FuzzyRuleAntecedent();
+  ifLeftBigAndRightSmall->joinWithAND(big2,small3);
 
-
-
-  // Trzecia zasada (jeśli przód bardzo mało i lewo mały a prawo średnio lub dużo)
-
-  FuzzyRuleAntecedent* ifRightAverageOrBig = new FuzzyRuleAntecedent();
-  ifRightAverageOrBig->joinWithOR(average3,big3);
-
-
- 
-
-
-
-  // Zasada jezdzenia 
+  FuzzyRuleAntecedent* ForwardVerySmall = new FuzzyRuleAntecedent();
+  ForwardVerySmall->joinSingle(very_small);
   
-  FuzzyRuleAntecedent* ifLeftAverageOrBigAndRightAverageOrBig = new FuzzyRuleAntecedent();
-  ifLeftAverageOrBigAndRightAverageOrBig->joinWithAND(ifLeftAverageOrBig,ifRightAverageOrBig);
-    
-  FuzzyRuleAntecedent* ifLeftAverageOrBigAndRightAverageOrBigAndForwardAverage = new FuzzyRuleAntecedent();
-  ifLeftAverageOrBigAndRightAverageOrBigAndForwardAverage->joinWithAND(ifLeftAverageOrBigAndRightAverageOrBig,average);
-
-  FuzzyRuleConsequent* GoForwardMild = new FuzzyRuleConsequent();
-  GoForwardMild->addOutput(slow);
-
-  FuzzyRule* fuzzyRule04 = new FuzzyRule(4,ifLeftAverageOrBigAndRightAverageOrBigAndForwardAverage,GoForwardMild);
-  fuzzy->addFuzzyRule(fuzzyRule04); 
-
-  // Kiedy żaden kierunek nie jest dobry
-
-  
-
-  FuzzyRuleAntecedent* ifLeftSmallAndRightSmall = new FuzzyRuleAntecedent();
-  ifLeftSmallAndRightSmall->joinWithAND(small2,small3);
-
-  FuzzyRuleAntecedent* ifLeftSmallAndRightSmallAndForwardVerySmall = new FuzzyRuleAntecedent();
-  ifLeftSmallAndRightSmallAndForwardVerySmall->joinWithAND(ifLeftSmallAndRightSmall,small);
+  FuzzyRuleAntecedent* ifLeftBigForwardVerySmallAndRightSmall = new FuzzyRuleAntecedent();
+  ifLeftBigForwardVerySmallAndRightSmall->joinWithAND(ifLeftBigAndRightSmall,ForwardVerySmall);
 
   FuzzyRuleConsequent* DoALeftMildTurn = new FuzzyRuleConsequent();
-  DoALeftMildTurn->addOutput(mild_turn);
+  DoALeftMildTurn->addOutput(right_mild_turn);
   DoALeftMildTurn->addOutput(left);
 
-  FuzzyRule* fuzzyRule05 = new FuzzyRule(5,ifLeftSmallAndRightSmallAndForwardVerySmall,DoALeftMildTurn);
-  fuzzy->addFuzzyRule(fuzzyRule05); 
-
-  //
-  FuzzyRuleAntecedent* ifLeftAverageAndRightAverage = new FuzzyRuleAntecedent();
-  ifLeftAverageAndRightAverage->joinWithAND(average2,average3);
+  FuzzyRule* fuzzyRule02 = new FuzzyRule(2,ifLeftBigForwardVerySmallAndRightSmall,DoALeftMildTurn);
+  fuzzy->addFuzzyRule(fuzzyRule02); 
   
-  FuzzyRuleAntecedent* ifLeftAverageAndRightAverageAndForwardBig = new FuzzyRuleAntecedent();
-  ifLeftAverageAndRightAverageAndForwardBig->joinWithAND(ifLeftAverageAndRightAverage,big);
-  
-  FuzzyRuleConsequent* GoForwardMild2 = new FuzzyRuleConsequent();
-  GoForwardMild2->addOutput(mild);
+ 
+  // Trzecia zasada
+  FuzzyRuleAntecedent* ifForwardVerySmallAndLeftSmall = new FuzzyRuleAntecedent();
+  ifForwardVerySmallAndLeftSmall->joinWithAND(very_small,small2);
 
-  FuzzyRule* fuzzyRule06 = new FuzzyRule(6,ifLeftAverageAndRightAverageAndForwardBig,GoForwardMild2);
-  fuzzy->addFuzzyRule(fuzzyRule06); 
+  FuzzyRuleAntecedent* IfRightBig = new FuzzyRuleAntecedent();
+  IfRightBig->joinSingle(big3);
 
-  FuzzyRuleAntecedent* ifLeftAverageOrBigAndRightAverageOrBigAndForwardVerySmall = new FuzzyRuleAntecedent();
-  ifLeftAverageOrBigAndRightAverageOrBigAndForwardVerySmall->joinWithAND(ifLeftAverageOrBigAndRightAverageOrBig,very_small);
+  FuzzyRuleAntecedent* ifLeftSmallForwardVerySmallAndRightBig = new FuzzyRuleAntecedent();
+  ifLeftSmallForwardVerySmallAndRightBig->joinWithAND(ifForwardVerySmallAndLeftSmall,IfRightBig);
 
+  FuzzyRuleConsequent* DoARightMildTurn = new FuzzyRuleConsequent();
+  DoARightMildTurn->addOutput(right_mild_turn);
+  DoARightMildTurn->addOutput(right);
 
-  FuzzyRule* fuzzyRule07 = new FuzzyRule(7,ifLeftAverageOrBigAndRightAverageOrBigAndForwardVerySmall,DoARightSmallTurn);
-  fuzzy->addFuzzyRule(fuzzyRule07);
-  
-
-  //
-
-  //
-  FuzzyRuleAntecedent* ifLeftAverageOrRightAverage = new FuzzyRuleAntecedent();
-  ifLeftAverageOrRightAverage->joinWithOR(average2,average3);
-
-  FuzzyRuleAntecedent* ifLeftAverageOrRightAverageAndForwardBig = new FuzzyRuleAntecedent();
-  ifLeftAverageOrRightAverageAndForwardBig->joinWithAND(ifLeftAverageOrRightAverage,big);
-   
-
-  FuzzyRule* fuzzyRule08 = new FuzzyRule(8,ifLeftAverageOrRightAverageAndForwardBig,GoForwardMild2);
-  fuzzy->addFuzzyRule(fuzzyRule08);
-  
-
-  //
-  
-  FuzzyRuleAntecedent* ifRightVerySmall = new FuzzyRuleAntecedent();
-  ifRightVerySmall->joinSingle(very_small3);
-
-  FuzzyRule* fuzzyRule03 = new FuzzyRule(3,ifRightVerySmall,DoALeftSmallTurn);
+  FuzzyRule* fuzzyRule03 = new FuzzyRule(3,ifLeftSmallForwardVerySmallAndRightBig,DoARightMildTurn);
   fuzzy->addFuzzyRule(fuzzyRule03); 
   
-  FuzzyRuleAntecedent* ifLeftVerySmall = new FuzzyRuleAntecedent();
-  ifLeftVerySmall->joinSingle(very_small2);
+  /*
+  FuzzyRuleAntecedent* ifForwardVerySmall = new FuzzyRuleAntecedent();
+  ifForwardVerySmall ->joinSingle(very_small);
 
-  FuzzyRule* fuzzyRule02 = new FuzzyRule(2,ifLeftVerySmall,DoARightSmallTurn);
-  fuzzy->addFuzzyRule(fuzzyRule02); 
+  FuzzyRuleConsequent* DoATurn= new FuzzyRuleConsequent();
+  DoATurn->addOutput(mild_turn);
 
+  FuzzyRule* fuzzyRule01 = new FuzzyRule(1, ifForwardVerySmall, DoATurn);
+  fuzzy->addFuzzyRule(fuzzyRule01);
+  //
+
+  FuzzyRuleAntecedent* ifForwardSmall = new FuzzyRuleAntecedent();
+  ifForwardSmall ->joinSingle(small);
+
+  FuzzyRuleConsequent* GoForwardSlow= new FuzzyRuleConsequent();
+  DoATurn->addOutput(slow);
+
+  FuzzyRule* fuzzyRule04 = new FuzzyRule(1, ifForwardSmall, GoForwardSlow);
+  fuzzy->addFuzzyRule(fuzzyRule04);
+  
+  FuzzyRuleAntecedent* ifForwardAverage= new FuzzyRuleAntecedent();
+  ifForwardAverage->joinSingle(average);
+
+  FuzzyRuleConsequent* GoForwardMild= new FuzzyRuleConsequent();
+  GoForwardMild->addOutput(mild);
+
+  FuzzyRule* fuzzyRule02 = new FuzzyRule(2, ifForwardAverage, GoForwardMild);
+  fuzzy->addFuzzyRule(fuzzyRule02);
+  //
+  FuzzyRuleAntecedent* ifForwardBig= new FuzzyRuleAntecedent();
+  ifForwardBig->joinSingle(big);
+
+  FuzzyRuleConsequent* GoForwardFast= new FuzzyRuleConsequent();
+  GoForwardFast->addOutput(fast);
+
+  FuzzyRule* fuzzyRule03 = new FuzzyRule(3, ifForwardBig, GoForwardFast);
+  fuzzy->addFuzzyRule(fuzzyRule03);
+  
+
+
+  /*
+  FuzzyRuleAntecedent* LeftSmallAndRightSmall = new FuzzyRuleAntecedent();
+  LeftSmallAndRightSmall->joinWithAND(small2,small3);
+
+  FuzzyRuleAntecedent* LeftAverageAndRightAverage = new FuzzyRuleAntecedent();
+  LeftAverageAndRightAverage->joinWithAND(average2,average3);
+
+  FuzzyRuleAntecedent* LeftBigAndRightBig = new FuzzyRuleAntecedent();
+  LeftBigAndRightBig->joinWithAND(big2,big3);
+
+  FuzzyRuleAntecedent* LeftBigAndRightSmall = new FuzzyRuleAntecedent();
+  LeftBigAndRightSmall->joinWithAND(big2,small3);
+
+  FuzzyRuleAntecedent* LeftSmallAndRightBig = new FuzzyRuleAntecedent();
+  LeftSmallAndRightBig->joinWithAND(small,big3);
+
+
+  
+  // zasada pierwsza | jesli sensory = malo miejsca, skrec w miejscu
+  
+  FuzzyRuleAntecedent* middleSmallAndLeftSmallAndRightSmall = new FuzzyRuleAntecedent();
+  middleSmallAndLeftSmallAndRightSmall->joinWithAND(LeftSmallAndRightSmall,small);
+  
+  FuzzyRuleConsequent* DoATurn= new FuzzyRuleConsequent();
+  DoATurn->addOutput(mild_turn);
+  //
+  FuzzyRule* fuzzyRule01 = new FuzzyRule(1, middleSmallAndLeftSmallAndRightSmall, DoATurn);
+  fuzzy->addFuzzyRule(fuzzyRule01);
+
+  // zasada druga | jesli sensory = srednio miejsca, jedz do przodu z srednia predkoscia
  
-
-   
-
+  FuzzyRuleAntecedent* middleAverageAndLeftAverageAndRightAverage = new FuzzyRuleAntecedent();
+  middleAverageAndLeftAverageAndRightAverage->joinWithAND(LeftAverageAndRightAverage,average);
   
+  FuzzyRuleConsequent* ForwardMild= new FuzzyRuleConsequent();
+  ForwardMild->addOutput(mild);
+  //
+  FuzzyRule* fuzzyRule02 = new FuzzyRule(2, middleAverageAndLeftAverageAndRightAverage, ForwardMild);
+  fuzzy->addFuzzyRule(fuzzyRule02);
+
+  // zasada  trzecia | jesli sensory = duzo miejsca, jedz do przodu z duza predkoscia
+ 
+  FuzzyRuleAntecedent* middleBigAndLeftBigAndRightBig = new FuzzyRuleAntecedent();
+  middleBigAndLeftBigAndRightBig->joinWithAND(LeftBigAndRightBig,big);
   
+  FuzzyRuleConsequent* ForwardFast= new FuzzyRuleConsequent();
+  ForwardFast->addOutput(fast);
+  //
+  FuzzyRule* fuzzyRule03 = new FuzzyRule(2, middleBigAndLeftBigAndRightBig, ForwardFast);
+  fuzzy->addFuzzyRule(fuzzyRule03);
+
+  // zasada czwarta | jesli sensory = z przodu dużo, lewo i prawo srednio, jedz do przodu z srednia predkoscia
+ 
+  FuzzyRuleAntecedent* middleBigAndLeftAverageAndRightAverage = new FuzzyRuleAntecedent();
+  middleBigAndLeftAverageAndRightAverage->joinWithAND(LeftAverageAndRightAverage,big);
+  
+
+  FuzzyRule* fuzzyRule04 = new FuzzyRule(2, middleAverageAndLeftAverageAndRightAverage, ForwardMild);
+  fuzzy->addFuzzyRule(fuzzyRule02);
+  
+  ;
+
+  /*
+  // zasada druga
+  FuzzyRuleAntecedent* middleBigAndLeftBig = new FuzzyRuleAntecedent();
+  middleBigAndLeftBig->joinWithAND(big,big2);
+  FuzzyRuleConsequent* GoForwardFast= new FuzzyRuleConsequent();
+  GoForwardFast->addOutput(fast);
+  //
+  FuzzyRule* fuzzyRule02 = new FuzzyRule(1, middleBigAndLeftBig, GoForwardFast);
+  fuzzy->addFuzzyRule(fuzzyRule02);
+
+  // zasada trzecia
+  FuzzyRuleAntecedent* middleMediumAndLeftMedium = new FuzzyRuleAntecedent();
+  middleMediumAndLeftMedium->joinWithAND(average,average2);
+  FuzzyRuleConsequent* GoMediumFast= new FuzzyRuleConsequent();
+  GoMediumFast->addOutput(mild);
+  //
+  FuzzyRule* fuzzyRule03 = new FuzzyRule(1, middleMediumAndLeftMedium, GoMediumFast);
+  fuzzy->addFuzzyRule(fuzzyRule03);
+  */
 }
 
 
@@ -341,12 +437,11 @@ void listen_bluetooth() {
 void loop() {
 
 
-
-
-  
+    
 
   ultrasonic_sensors();
 
+  
   
  
 
