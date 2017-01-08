@@ -60,11 +60,11 @@ void setup() {
   pinMode(in4, OUTPUT);
   
   // set serial
-  //Serial.begin(9600);    // uncomment that for Serial to work
+  Serial.begin(9600);    // uncomment that for Serial to work
   
   // set bluetooth serial
-  BT.begin(9600);        // uncomment that for BT to work
-  BT.println("Terminator 0.7 connected.");
+  //BT.begin(9600);        // uncomment that for BT to work
+  //BT.println("Terminator 0.7 connected.");
   
   fuzzy_rules();
   
@@ -136,8 +136,9 @@ void listen_bluetooth() {
 
 
 void loop() {
-    
-  listen_bluetooth();
+
+  //listen_bluetooth();
+  ultrasonic_sensors();
   
   }
   
