@@ -112,7 +112,7 @@ Serial.println("oryginalny print");
             right = 0;
             if( limit(leftEye.ping_cm(),2) >= limit(rightEye.ping_cm(),3))
             {
-              motorsTurnLeft(900,125);
+              motorsTurnLeft(700,125);
             }
             else
             {
@@ -136,9 +136,17 @@ Serial.println("oryginalny print");
           }
           if(left == 2)
           {
-            motorsBackward(75,125);
+            motorsBackward(225,125);
             left == 0;
             right == 0;
+            if( limit(leftEye.ping_cm(),2) >= limit(rightEye.ping_cm(),3))
+            {
+              motorsTurnLeft(700,125);
+            }
+            else
+            {
+              motorsTurnRight(700,125);
+            }
           }
           
         }
