@@ -11,22 +11,32 @@ int IRright() {
 }
 
 
-void line_tracking() {
-  // main line tracking function
-  if(IRleft() == 1 && IRright() == 1) {
-    motorsForward(10,85);
-  }
-  if(IRleft() == 0 && IRright() == 1) {
-    motorsTurnRight(10,120);
-  }
-  if(IRleft() == 1 && IRright() == 0) {
-    motorsTurnLeft(10,120);
-  }
-  if(IRleft() == 0 && IRright() == 0) {
-    motorsForward(10,85);
-  }
+int IRcenter() {
+  return digitalRead(centerIR);
 }
 
+
+void line_tracking() {
+  // main line tracking function
+  if(IRleft() == 1 && IRcenter() == 1 && IRright() == 0) {
+    motorsTurnRight(10,120);
+  }
+  if(IRleft() == 0 && IRcenter() == 1 && IRright() == 1) {
+    motorsTurnLeft(10,120);
+  }
+  if(IRleft() == 0 && IRcenter() == 0 && IRright() == 1) {
+    motorsTurnLeft(25,140);
+  }
+  if(IRleft() == 1 && IRcenter() == 0 && IRright() == 0) {
+    motorsTurnRight(25,140);
+  }
+  if(IRleft() == 1 && IRcenter() == 0 && IRright() == 1) {
+    motorsForward(10,90);
+  }
+  if(IRleft() == 1 && IRcenter() == 1 && IRright() == 1) {
+    motorsBackward(10,90);
+  }
+}
 
 
 void line_tracking_fast() {

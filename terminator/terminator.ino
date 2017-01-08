@@ -22,8 +22,8 @@ int enB = 5;
 int in3 = 6;
 int in4 = 7;
 // IR sensors
-int leftIR = 14;
-int rightIR = 15;
+int leftIR = 15;
+int rightIR = 14;
 int centerIR = 16;
 // ultrasonic sensors
 int middleEyeTrigger = 8;
@@ -60,11 +60,11 @@ void setup() {
   pinMode(in4, OUTPUT);
   
   // set serial
-  //Serial.begin(9600);    // uncomment that for Serial to work
+  Serial.begin(9600);    // uncomment that for Serial to work
   
   // set bluetooth serial
-  BT.begin(9600);        // uncomment that for BT to work
-  BT.println("Terminator 0.7 connected.");
+  //BT.begin(9600);        // uncomment that for BT to work
+  //BT.println("Terminator 0.7 connected.");
   
   fuzzy_rules();
   
@@ -130,8 +130,10 @@ void listen_bluetooth() {
 
 
 void loop() {
+  
+  Serial.println(IRleft());
     
-  listen_bluetooth();
+  line_tracking();
   
   }
   
