@@ -24,6 +24,7 @@ int in4 = 7;
 // IR sensors
 int leftIR = 14;
 int rightIR = 15;
+int centerIR = 16;
 // ultrasonic sensors
 int middleEyeTrigger = 8;
 int middleEyeEcho = 4;
