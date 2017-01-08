@@ -60,11 +60,11 @@ void setup() {
   pinMode(in4, OUTPUT);
   
   // set serial
-  Serial.begin(9600);    // uncomment that for Serial to work
+  //Serial.begin(9600);    // uncomment that for Serial to work
   
   // set bluetooth serial
-  //BT.begin(9600);        // uncomment that for BT to work
-  //BT.println("Terminator 0.7 connected.");
+  BT.begin(9600);        // uncomment that for BT to work
+  BT.println("Terminator 0.7 connected.");
   
   fuzzy_rules();
   
@@ -82,6 +82,7 @@ void listen_bluetooth() {
       btx = (BT.read());
       motorsForward(0, 250);
       if (btx == 'O') {
+        motorsOff();
         break;
       }
     }
@@ -90,22 +91,25 @@ void listen_bluetooth() {
       btx = (BT.read());
       motorsBackward(0, 250);
       if (btx == 'O') {
+        motorsOff();
         break;
       }
     }
     while (bt_signal == 'L') {
       // turn left
       btx = (BT.read());
-      motorsTurnLeft(0, 250);
+      motorsTurnLeft(0, 200);
       if (btx == 'O') {
+        motorsOff();
         break;
       }
     } 
     while (bt_signal == 'R') {
       // turn right
       btx = (BT.read());
-      motorsTurnRight(0, 250);
+      motorsTurnRight(0, 200);
       if (btx == 'O') {
+        motorsOff();
         break;
       }
     }
@@ -114,6 +118,7 @@ void listen_bluetooth() {
       btx = (BT.read());
       line_tracking();
       if (btx == 'O') {
+        motorsOff();
         break;
       }
     }
@@ -122,6 +127,7 @@ void listen_bluetooth() {
       btx = (BT.read());
       ultrasonic_sensors();
       if (btx == 'O') {
+        motorsOff();
         break;
       }
     }
@@ -130,10 +136,8 @@ void listen_bluetooth() {
 
 
 void loop() {
-  
-  Serial.println(IRleft());
     
-  line_tracking();
+  listen_bluetooth();
   
   }
   

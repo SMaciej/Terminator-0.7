@@ -25,10 +25,11 @@ void motorsForward(int period, int power) {
   
   // if period is 0 motors will run for an unlimited period of time
   if (period != 0) { 
-    delay(period);    
+    delay(period);
+    motorsOff();     
   }
   
-  motorsOff();
+
 }
 
 
@@ -47,10 +48,11 @@ void motorsBackward(int period, int power) {
   
   // if period is 0 motors will run for an unlimited period of time
   if (period != 0) { 
-    delay(period);    
+    delay(period);
+    motorsOff();     
   }
   
-  motorsOff();
+
 }
 
 
@@ -69,10 +71,11 @@ void motorsTurnRight(int period, int power) {
   
   // if period is 0 motors will run for an unlimited period of time
   if (period != 0) { 
-    delay(period);    
+    delay(period);
+    motorsOff();     
   }
   
-  motorsOff();
+
 }
 
 
@@ -91,9 +94,10 @@ void motorsTurnLeft(int period, int power) {
   
   // if period is 0 motors will run for an unlimited period of time
   if (period != 0) { 
-    delay(period);    
+    delay(period);
+    motorsOff();  
   }
   
-  motorsOff();
+
 }
 
