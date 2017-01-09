@@ -234,23 +234,15 @@ void ultrasonic_sensors()
   Serial.println(wasTheRulleFired);
   wasTheRulleFired = fuzzy->isFiredRule(6);
   Serial.println(wasTheRulleFired);
-  wasTheRulleFired = fuzzy->isFiredRule(7);
-  Serial.println(wasTheRulleFired);
-  wasTheRulleFired = fuzzy->isFiredRule(8);
-  Serial.println(wasTheRulleFired);
-  wasTheRulleFired = fuzzy->isFiredRule(9);
-  Serial.println(wasTheRulleFired);
 
   int output = fuzzy->defuzzify(1);
   int output2 = fuzzy->defuzzify(2);
   int output3 = fuzzy->defuzzify(3);
-  int output4 = fuzzy->defuzzify(4);
 
   //Serial.println(output2);
   Serial.println("Deffuzify");
   Serial.println(output);
   Serial.println(output3);
-  Serial.println(output4);
 
   if ( output3 >= 5 && output3 < 10)
   {
