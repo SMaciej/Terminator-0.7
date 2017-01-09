@@ -5,7 +5,7 @@ void fuzzy_rules()
   // ZBIORY ROZMYTE
 
   // INPUT
-
+  
   // odleglosc na sensorze srodkowym
   FuzzyInput* distance = new FuzzyInput(1);
   //
@@ -65,23 +65,7 @@ void fuzzy_rules()
   //
   fuzzy->addFuzzyOutput(speed);
 
-  //
-  /*
-    // obrot (jak duzy powinien byc, tj. jego czas trwania)
-    FuzzyOutput* turn = new FuzzyOutput(2);
-    //
-    FuzzySet* small_turn = new FuzzySet(300,300,300,600);
-    turn->addFuzzySet(small_turn);
-    //
-    FuzzySet* mild_turn = new FuzzySet(300,600,600,900);
-    turn->addFuzzySet(mild_turn);
-    //
-    FuzzySet* fast_turn = new FuzzySet(600,900,900,900);
-    turn->addFuzzySet(fast_turn);
-    //
-    fuzzy->addFuzzyOutput(turn);
-  */
-
+  // zakręt
   FuzzyOutput* turn = new FuzzyOutput(2);
   //
   FuzzySet* small_turn = new FuzzySet(150, 150, 150, 450);
@@ -95,7 +79,7 @@ void fuzzy_rules()
   //
   fuzzy->addFuzzyOutput(turn);
 
-  // kierunek (lewo lub prawo)
+  // kierunek (lewo, prawo, nieokreślony)
   FuzzyOutput* side = new FuzzyOutput(3);
   //
   FuzzySet* left = new FuzzySet(0, 0, 0, 5);
@@ -104,17 +88,11 @@ void fuzzy_rules()
   FuzzySet* right = new FuzzySet(5, 10, 10, 10);
   side->addFuzzySet(right);
   //
+  FuzzySet* unknown = new FuzzySet(10, 15, 15, 15);
+  side->addFuzzySet(unknown);
+  //
   fuzzy->addFuzzyOutput(side);
 
-  // stuck (kiedy utknie w rogu)
-  FuzzyOutput* stuck = new FuzzyOutput(4);
-  //
-  FuzzySet* ohno = new FuzzySet(0, 0, 0, 5);
-  stuck->addFuzzySet(ohno);
-  //
-  fuzzy->addFuzzyOutput(stuck);
-
-  // ZASADY LOGIKI ROZMYTEJ
 
   // ZASADY LOGIKI ROZMYTEJ
 
@@ -130,7 +108,6 @@ void fuzzy_rules()
 
   FuzzyRule* fuzzyRule01 = new FuzzyRule(1, ifLeftAndForwardAndRightBig, GoForwardFast);
   fuzzy->addFuzzyRule(fuzzyRule01);
-
 
   // Druga zasada (jeśli lewo bardzo małe skręć w prawo)
   FuzzyRuleConsequent* DoARightSmallTurn = new FuzzyRuleConsequent();
@@ -169,10 +146,6 @@ void fuzzy_rules()
 
   FuzzyRuleConsequent* GoForwardMild = new FuzzyRuleConsequent();
   GoForwardMild->addOutput(mild);
-
-  
-
-  // TUTAJ SLOW
   
   FuzzyRule* fuzzyRule04 = new FuzzyRule(4, ifLeftAverageOrBigAndRightAverageOrBigAndForwardAverage, GoForwardMild);
   fuzzy->addFuzzyRule(fuzzyRule04);
@@ -180,8 +153,8 @@ void fuzzy_rules()
   // Zasada piąta (jeśli przedni sensor podaje małe odległości)
   FuzzyRuleConsequent* DoAMildTurn = new FuzzyRuleConsequent();
   DoAMildTurn->addOutput(mild_turn);
-  DoAMildTurn->addOutput(ohno);
-
+  DoAMildTurn->addOutput(unknown);
+  
   FuzzyRuleAntecedent* ifForwardVerySmall = new FuzzyRuleAntecedent();
   ifForwardVerySmall->joinSingle(very_small);
 
@@ -196,87 +169,8 @@ void fuzzy_rules()
   FuzzyRuleAntecedent* ifLeftAverageAndRightAverageAndForwardBig = new FuzzyRuleAntecedent();
   ifLeftAverageAndRightAverageAndForwardBig->joinWithAND(ifLeftAverageAndRightAverage, big);
 
- 
-
   FuzzyRule* fuzzyRule06 = new FuzzyRule(6, ifLeftAverageAndRightAverageAndForwardBig, GoForwardMild);
   fuzzy->addFuzzyRule(fuzzyRule06);
-
-  // Zasada siódma (jeśli lewo i prawo małe a przód średni, jedź wolno)
-
-
-  
-
-
-  
-
-  
-
-
-
-
-  // Trzecia zasada (jeśli przód bardzo mało i lewo mały a prawo średnio lub dużo)
-
-
-
-
-
-
-  // Zasada jezdzenia
-
-
-
-  // Kiedy żaden kierunek nie jest dobry
-  /*
-    FuzzyRuleAntecedent* ifLeftSmallOrVerySmall = new FuzzyRuleAntecedent();
-    ifLeftSmallOrVerySmall->joinWithOR(small2,very_small2);
-
-    FuzzyRuleAntecedent* ifRightSmallOrVerySmall = new FuzzyRuleAntecedent();
-    ifRightSmallOrVerySmall->joinWithOR(small3,very_small3);
-
-    FuzzyRuleAntecedent* ifLeftSmallOrVerySmallAndRightSmallOrVerySmall = new FuzzyRuleAntecedent();
-    ifLeftSmallOrVerySmallAndRightSmallOrVerySmall->joinWithAND(ifLeftSmallOrVerySmall,ifRightSmallOrVerySmall);
-
-    FuzzyRuleAntecedent* ifLeftSmallAndRightSmallAndForwardVerySmall = new FuzzyRuleAntecedent();
-    ifLeftSmallAndRightSmallAndForwardVerySmall->joinWithAND(ifLeftSmallOrVerySmallAndRightSmallOrVerySmall,small);
-  */
-
-  /*
-  FuzzyRuleConsequent* DoALeftMildTurn = new FuzzyRuleConsequent();
-  DoALeftMildTurn->addOutput(mild_turn);
-  DoALeftMildTurn->addOutput(left);
-  */
-  
-
-  //
-  
-
-  /*
-    FuzzyRuleAntecedent* ifLeftAverageOrBigAndRightAverageOrBigAndForwardVerySmall = new FuzzyRuleAntecedent();
-    ifLeftAverageOrBigAndRightAverageOrBigAndForwardVerySmall->joinWithAND(ifLeftAverageOrBigAndRightAverageOrBig,very_small);
-
-
-    FuzzyRule* fuzzyRule07 = new FuzzyRule(7,ifLeftAverageOrBigAndRightAverageOrBigAndForwardVerySmall,DoARightSmallTurn);
-    fuzzy->addFuzzyRule(fuzzyRule07);
-  */
-
-  //
-
-  //
-  /*
-    FuzzyRuleAntecedent* ifLeftAverageOrRightAverage = new FuzzyRuleAntecedent();
-    ifLeftAverageOrRightAverage->joinWithOR(average2,average3);
-
-    FuzzyRuleAntecedent* ifLeftAverageOrRightAverageAndForwardBig = new FuzzyRuleAntecedent();
-    ifLeftAverageOrRightAverageAndForwardBig->joinWithAND(ifLeftAverageOrRightAverage,big);
-
-
-    FuzzyRule* fuzzyRule08 = new FuzzyRule(8,ifLeftAverageOrRightAverageAndForwardBig,GoForwardMild2);
-    fuzzy->addFuzzyRule(fuzzyRule08);
-  
-  */
-  //
-
-  
 
   
 
@@ -358,7 +252,7 @@ void ultrasonic_sensors()
   Serial.println(output3);
   Serial.println(output4);
 
-  if ( output3 >= 5 && output4 == 0)
+  if ( output3 >= 5 && output3 < 10)
   {
     Serial.println("Prawo o mocy:");
     Serial.println(output2);
@@ -374,7 +268,7 @@ void ultrasonic_sensors()
   }
   else
   {
-    if ( output3 > 0 && output4 == 0)
+    if ( output3 > 0 && output3 < 10)
     {
       Serial.println("Lewo o mocy:");
       Serial.println(output2);
@@ -400,7 +294,7 @@ void ultrasonic_sensors()
     }
     else
     {
-      if ( output4 > 0 )
+      if ( output3 > 0 )
       {
         if ( limit(leftEye.ping_cm(), 2) >= limit(rightEye.ping_cm(), 3))
         {

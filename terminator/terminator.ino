@@ -137,8 +137,8 @@ void listen_bluetooth() {
 
 void loop() {
 
-  //listen_bluetooth();
-  ultrasonic_sensors();
+  listen_bluetooth();
+  //ultrasonic_sensors();
   
   }
   
