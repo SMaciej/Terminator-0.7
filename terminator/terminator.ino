@@ -35,6 +35,8 @@ int rightEyeTrigger = 13;
 int turnTest = 0;
 int right;
 int left;
+int right2;
+int left2;
 
 // GLOBAL VARIABLES
 // bluetooth signal

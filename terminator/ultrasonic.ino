@@ -257,6 +257,24 @@ void ultrasonic_sensors()
         left = 2;
       }
     }
+    if (right2 == 0)
+    {
+      left2++;
+    }
+    if (right2 == 2)
+    {
+       motorsBackward(225, 125);
+       left2 = 0;
+       right2 = 0;
+       if ( limit(leftEye.ping_cm(), 2) >= limit(rightEye.ping_cm(), 3))
+       {
+         motorsTurnLeft(800, 125);
+       }
+       else
+       {
+         motorsTurnRight(800, 125);
+       }
+    }
   }
   else
   {
@@ -283,6 +301,16 @@ void ultrasonic_sensors()
           motorsTurnRight(800, 125);
         }
       }
+      
+      if (right2 == 1)
+      {
+        if (left2 == 0)
+        {
+          left2++;
+          right2 = 2;
+        }
+      }
+      
     }
     else
     {
@@ -338,12 +366,16 @@ void ultrasonic_sensors()
           motorsForward(40, output);
           left = 0;
           right = 0;
+          left2 = 0;
+          right2 = 0;
         }
         else
         {
           motorsForward(25, output);
           left = 0;
           right = 0;
+          left2 = 0;
+          right2 = 0;
         }
       }
     }
