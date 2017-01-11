@@ -108,7 +108,7 @@ void fuzzy_rules()
 
   FuzzyRule* fuzzyRule01 = new FuzzyRule(1, ifLeftAndForwardAndRightBig, GoForwardFast);
   fuzzy->addFuzzyRule(fuzzyRule01);
-
+  /*
   // Druga zasada (jeśli lewo bardzo małe skręć w prawo)
   FuzzyRuleConsequent* DoARightSmallTurn = new FuzzyRuleConsequent();
   DoARightSmallTurn->addOutput(small_turn);
@@ -130,7 +130,9 @@ void fuzzy_rules()
 
   FuzzyRule* fuzzyRule03 = new FuzzyRule(3, ifRightVerySmall, DoALeftSmallTurn);
   fuzzy->addFuzzyRule(fuzzyRule03);
+  */
 
+  
   // Czwarta zasada (main) (jeśli lewo średnie lub duże i prawo średnie lub duże i przód średni jedź z średnią prędkością)
   FuzzyRuleAntecedent* ifLeftAverageOrBig = new FuzzyRuleAntecedent();
   ifLeftAverageOrBig->joinWithOR(average2, big2);
@@ -172,7 +174,27 @@ void fuzzy_rules()
   FuzzyRule* fuzzyRule06 = new FuzzyRule(6, ifLeftAverageAndRightAverageAndForwardBig, GoForwardMild);
   fuzzy->addFuzzyRule(fuzzyRule06);
 
-  
+      // Druga zasada (jeśli lewo bardzo małe skręć w prawo)
+  FuzzyRuleConsequent* DoARightSmallTurn = new FuzzyRuleConsequent();
+  DoARightSmallTurn->addOutput(small_turn);
+  DoARightSmallTurn->addOutput(right);
+
+  FuzzyRuleAntecedent* ifLeftVerySmallAndRightBig = new FuzzyRuleAntecedent();
+  ifLeftVerySmallAndRightBig->joinWithAND(very_small2,big3);
+
+  FuzzyRule* fuzzyRule02 = new FuzzyRule(2, ifLeftVerySmallAndRightBig, DoARightSmallTurn);
+  fuzzy->addFuzzyRule(fuzzyRule02);
+
+  // Trzecia zasada (jeśli prawo bardzo małe skręć w lewo)
+  FuzzyRuleAntecedent* ifRightVerySmallAndLeftBig = new FuzzyRuleAntecedent();
+  ifRightVerySmallAndLeftBig->joinWithAND(very_small3,big2);
+
+  FuzzyRuleConsequent* DoALeftSmallTurn = new FuzzyRuleConsequent();
+  DoALeftSmallTurn->addOutput(small_turn);
+  DoALeftSmallTurn->addOutput(left);
+
+  FuzzyRule* fuzzyRule03 = new FuzzyRule(3, ifRightVerySmallAndLeftBig, DoALeftSmallTurn);
+  fuzzy->addFuzzyRule(fuzzyRule03);  
 
 }
 
