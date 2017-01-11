@@ -72,6 +72,35 @@ void setup() {
   
 }
 
+int limit(int value, int sensor)
+{
+  /*
+    while ( value == 0)
+    {
+    if ( sensor == 1)
+    {
+      value = middleEye.ping_cm();
+    }
+    if ( sensor == 2)
+    {
+      value = leftEye.ping_cm();
+    }
+    if ( sensor == 3)
+    {
+      value = rightEye.ping_cm();
+    }
+    }
+  */
+  if ( value > 60)
+  {
+    value = 60;
+  }
+  if ( value == 0)
+  {
+    value = 60;
+  }
+  return value;
+}
 
 void listen_bluetooth() {
   if (BT.available()) {
@@ -82,7 +111,28 @@ void listen_bluetooth() {
     while (bt_signal == 'F') {
       // drive forward
       btx = (BT.read());
-      motorsForward(0, 250);
+      if( limit(middleEye.ping_cm(), 1) >= 30)
+      {
+        motorsForward(0, 250);
+      }
+      else
+      {
+        if ( limit(middleEye.ping_cm(), 1) >=15)
+        {
+          motorsForward(0, 150);
+        }
+        else
+        {
+          if ( limit(middleEye.ping_cm(), 1) >=5 )
+          {
+            motorsForward(0,100);
+          }
+          else
+          {
+            
+          }
+        }
+      }
       if (btx == 'O') {
         motorsOff();
         break;

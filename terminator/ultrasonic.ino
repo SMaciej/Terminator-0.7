@@ -200,35 +200,6 @@ void fuzzy_rules()
 
 
 
-int limit(int value, int sensor)
-{
-  /*
-    while ( value == 0)
-    {
-    if ( sensor == 1)
-    {
-      value = middleEye.ping_cm();
-    }
-    if ( sensor == 2)
-    {
-      value = leftEye.ping_cm();
-    }
-    if ( sensor == 3)
-    {
-      value = rightEye.ping_cm();
-    }
-    }
-  */
-  if ( value > 60)
-  {
-    value = 60;
-  }
-  if ( value == 0)
-  {
-    value = 60;
-  }
-  return value;
-}
 
 void ultrasonic_sensors()
 {
